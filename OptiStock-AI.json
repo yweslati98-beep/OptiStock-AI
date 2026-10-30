@@ -1,0 +1,183 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ab0eb951-0e50-432c-977b-04729b0e8699",
+      "name": "When chat message received",
+      "webhookId": "390970a3-2f9f-4426-907a-9eff70341013"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "b5905246-68d6-42d5-ba62-d4906243b0b8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        96,
+        208
+      ],
+      "id": "779676ff-440e-4fac-8acb-0db16326780c",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        240,
+        208
+      ],
+      "id": "a89edd84-f3f1-4766-b07b-f4a7a380bd71",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Obtenir la liste complète des articles en stock avec leurs quantités et leurs emplacements",
+        "language": "python",
+        "pythonCode": "# Simulation de l'inventaire OptiStock-AI converti en texte\ninventory_text = \"\"\"\n- Article: Paracétamol 500mg | Stock: 1450 | Emplacement: Zone A-1 | Seuil d'alerte: 200\n- Article: Ibuprofène 400mg | Stock: 320 | Emplacement: Zone A-2 | Seuil d'alerte: 150\n- Article: Gants stériles (Boîte) | Stock: 85 | Emplacement: Zone B-4 | Seuil d'alerte: 100\n\"\"\"\n\nreturn inventory_text"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        384,
+        208
+      ],
+      "id": "3d0ac306-50d0-449a-a4b2-7d9615af7dfc",
+      "name": "Code Tool"
+    },
+    {
+      "parameters": {
+        "url": "https://nwghruplkieicywwxqbl.supabase.co/rest/v1/inventory",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "sb_publishable_IiMgq-wKSt2nL7PwyUZrvQ_aq3AMMUv"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer sb_publishable_IiMgq-wKSt2nL7PwyUZrvQ_aq3AMMUv"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.5,
+      "position": [
+        480,
+        124.1015625
+      ],
+      "id": "a59062c7-9087-4566-bf0d-5dbc482e3c93",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "4ada262a-ad9f-48de-b18c-3b359ce04bf1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a8cd45442f8f2ee525120eb954510582284500097ce3b8ff7947b4bc7e8014f5"
+  },
+  "nodeGroups": [],
+  "id": "a1UixnZljUBTXTmC",
+  "tags": []
+}
